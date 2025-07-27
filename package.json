@@ -1,0 +1,18 @@
+{
+  "name": "parser_demo",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markolofsen/carapis-parser.git"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "commit": "npx openrouter-commit -run",
+    "commit2": "git add . && git commit -m 'fixes' && git push"
+  },
+  "dependencies": {
+    "openrouter-commit": "^1.1.6"
+  }
+}

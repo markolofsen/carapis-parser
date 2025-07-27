@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Listings - Demo Parser</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="brands-menu">
+                <a href="/brands/toyota" class="brand-link">Toyota</a>
+                <a href="/brands/honda" class="brand-link">Honda</a>
+                <a href="/brands/bmw" class="brand-link">BMW</a>
+                <a href="/brands/mercedes" class="brand-link">Mercedes</a>
+                <a href="/brands/audi" class="brand-link">Audi</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="listings-container">
+            <h1>Car Listings - Toyota</h1>
+            
+            <div class="pagination-info">
+                <span>Page 1 of 5</span>
+                <span>Showing 1-20 of 100 cars</span>
+            </div>
+
+            <div class="car-listings">
+                <!-- Car Item 1 -->
+                <div class="car-item" data-id="toyota_camry_001">
+                    <div class="car-image">
+                        <img src="/images/toyota_camry_2020.jpg" alt="Toyota Camry 2020">
+                    </div>
+                    <div class="car-info">
+                        <h3 class="car-title">
+                            <a href="/car/toyota_camry_001">Toyota Camry 2020</a>
+                        </h3>
+                        <div class="car-price">$25,000</div>
+                        <div class="car-specs">
+                            <span class="mileage">45,000 km</span>
+                            <span class="year">2020</span>
+                            <span class="fuel">Gasoline</span>
+                        </div>
+                        <div class="car-location">New York, NY</div>
+                    </div>
+                </div>
+
+                <!-- Car Item 2 -->
+                <div class="car-item" data-id="toyota_corolla_002">
+                    <div class="car-image">
+                        <img src="/images/toyota_corolla_2021.jpg" alt="Toyota Corolla 2021">
+                    </div>
+                    <div class="car-info">
+                        <h3 class="car-title">
+                            <a href="/car/toyota_corolla_002">Toyota Corolla 2021</a>
+                        </h3>
+                        <div class="car-price">$22,500</div>
+                        <div class="car-specs">
+                            <span class="mileage">32,000 km</span>
+                            <span class="year">2021</span>
+                            <span class="fuel">Hybrid</span>
+                        </div>
+                        <div class="car-location">Los Angeles, CA</div>
+                    </div>
+                </div>
+
+                <!-- Car Item 3 -->
+                <div class="car-item" data-id="toyota_rav4_003">
+                    <div class="car-image">
+                        <img src="/images/toyota_rav4_2019.jpg" alt="Toyota RAV4 2019">
+                    </div>
+                    <div class="car-info">
+                        <h3 class="car-title">
+                            <a href="/car/toyota_rav4_003">Toyota RAV4 2019</a>
+                        </h3>
+                        <div class="car-price">$28,000</div>
+                        <div class="car-specs">
+                            <span class="mileage">58,000 km</span>
+                            <span class="year">2019</span>
+                            <span class="fuel">Gasoline</span>
+                        </div>
+                        <div class="car-location">Chicago, IL</div>
+                    </div>
+                </div>
+
+                <!-- Car Item 4 -->
+                <div class="car-item" data-id="toyota_highlander_004">
+                    <div class="car-image">
+                        <img src="/images/toyota_highlander_2022.jpg" alt="Toyota Highlander 2022">
+                    </div>
+                    <div class="car-info">
+                        <h3 class="car-title">
+                            <a href="/car/toyota_highlander_004">Toyota Highlander 2022</a>
+                        </h3>
+                        <div class="car-price">$35,000</div>
+                        <div class="car-specs">
+                            <span class="mileage">18,000 km</span>
+                            <span class="year">2022</span>
+                            <span class="fuel">Hybrid</span>
+                        </div>
+                        <div class="car-location">Miami, FL</div>
+                    </div>
+                </div>
+
+                <!-- Car Item 5 -->
+                <div class="car-item" data-id="toyota_tacoma_005">
+                    <div class="car-image">
+                        <img src="/images/toyota_tacoma_2021.jpg" alt="Toyota Tacoma 2021">
+                    </div>
+                    <div class="car-info">
+                        <h3 class="car-title">
+                            <a href="/car/toyota_tacoma_005">Toyota Tacoma 2021</a>
+                        </h3>
+                        <div class="car-price">$32,000</div>
+                        <div class="car-specs">
+                            <span class="mileage">42,000 km</span>
+                            <span class="year">2021</span>
+                            <span class="fuel">Gasoline</span>
+                        </div>
+                        <div class="car-location">Seattle, WA</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <a href="/brands/toyota?page=1" class="current">1</a>
+                <a href="/brands/toyota?page=2">2</a>
+                <a href="/brands/toyota?page=3">3</a>
+                <a href="/brands/toyota?page=4">4</a>
+                <a href="/brands/toyota?page=5">5</a>
+                <a href="/brands/toyota?page=2" class="next">Next →</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Demo Parser - Sample HTML for testing</p>
+    </footer>
+</body>
+</html> 

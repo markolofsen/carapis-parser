@@ -1,0 +1,19 @@
+# SQLite3 database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Database journal files
+*-journal
+*.db-journal
+
+# Database lock files
+*.db-lock
+*.sqlite-lock
+
+# Backup files
+*.db.backup
+*.sqlite.backup
+
+# Keep this directory
+!.gitignore 
