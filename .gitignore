@@ -208,3 +208,7 @@ settings.local.py
 .env.local
 .env.production
 .env.openrouter
+
+# Node
+node_modules/
+package-lock.json
