@@ -178,14 +178,6 @@ data/*.sqlite.backup
 data/*
 !data/.gitignore
 
-# Samples and test data
-samples/*.db
-samples/*.sqlite
-samples/*.sqlite3
-samples/*.log
-samples/temp/
-samples/cache/
-
 # Module specific
 module.core.egg-info/
 
@@ -212,3 +204,4 @@ settings.local.py
 # Node
 node_modules/
 package-lock.json
+
