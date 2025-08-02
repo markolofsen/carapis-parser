@@ -5,7 +5,7 @@ description = "Demo parser with HTTP client integration"
 authors = ["Mark <markolofsen@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "module"}]
+packages = [{include = "parser_demo"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -18,9 +18,12 @@ PyYAML = "^6.0"
 python-dotenv = "^1.1.1"
 questionary = "^2.0.0"
 peewee = "^3.18.2"
+faker = "^20.0.0"
+beautifulsoup4 = "^4.12.0"
 
 # Unrealparser
 unrealparser = {path = "../unrealparser", develop = true}
+asgiref = "^3.9.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0.0"

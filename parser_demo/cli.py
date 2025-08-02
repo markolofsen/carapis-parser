@@ -8,15 +8,16 @@ import argparse
 from pathlib import Path
 
 # Add the project root to Python path
-project_root = Path(__file__).parent.parent.parent
+project_root = Path(__file__)
 sys.path.insert(0, str(project_root))
 
 
 import asyncio
 import questionary
-from parsers.parser_demo.module import DemoParser, DemoConfig, get_logger
-from parsers.parser_demo.module.core.listing_parser import DemoListingParser
-from parsers.parser_demo.module.core.detail_parser import DemoDetailParser
+from .config import DemoConfig
+from .core.listing_parser import DemoListingParser
+from .core.detail_parser import DemoDetailParser
+from unreal_utils.logger import get_logger
 
 
 class DemoCLI:

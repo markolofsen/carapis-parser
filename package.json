@@ -10,7 +10,8 @@
   },
   "scripts": {
     "commit": "npx openrouter-commit -run",
-    "commit2": "git add . && git commit -m 'fixes' && git push"
+    "commit2": "git add . && git commit -m 'fixes' && git push",
+    "cli": "poetry run python -m parser_demo.cli"
   },
   "dependencies": {
     "openrouter-commit": "^1.1.6"
