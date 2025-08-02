@@ -2,12 +2,12 @@
 Demo Detail Extractor - Generate fake car detail data
 """
 
-from typing import Dict, Any, Tuple
-import random
-from datetime import datetime
+import re
+from typing import Dict, Any, Optional, List, Tuple
+from bs4 import BeautifulSoup
 
 from faker import Faker
-from parsers.tools.module.logger import get_logger
+from unreal_utils.logger import get_logger
 
 
 class DemoDetailExtractor:

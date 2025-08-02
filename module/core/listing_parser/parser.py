@@ -6,8 +6,8 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 import asyncio
 
-from parsers.tools.module.logger import get_logger
-from parsers.http_client.module.worker_manager import HttpWorkerManager
+from unreal_utils.logger import get_logger
+from unreal_http.worker_manager import HttpWorkerManager
 from ...config import DemoConfig
 from .extractor import DemoListingExtractor
 from .saver import DemoListingSaver

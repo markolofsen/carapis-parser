@@ -7,8 +7,8 @@ import time
 from typing import Optional, List, Dict, Any
 
 from datetime import datetime
-from parsers.tools.module.logger import get_logger
-from parsers.http_client.module import HttpWorkerManager
+from unreal_utils.logger import get_logger
+from unreal_http import HttpWorkerManager
 from ...config import DemoConfig
 from .extractor import DemoDetailExtractor
 from .saver import DemoDetailSaver

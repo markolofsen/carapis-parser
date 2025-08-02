@@ -1,11 +1,11 @@
 """
-Demo Listing Saver - Save fake car listing data to memory or database
+Demo Listing Saver - saves car listings to database or fake storage
 """
 
-from typing import Dict, Any, List, Tuple
-import time
+from typing import List, Dict, Any, Optional, Tuple
+from datetime import datetime
 
-from parsers.tools.module.logger import get_logger
+from unreal_utils.logger import get_logger
 from ...database.database import DemoDatabaseManager
 
 
@@ -37,7 +37,7 @@ class DemoListingSaver:
             # Add HTML to listing data
             listing_data["card_html"] = card_html
             listing_data["html_content"] = card_html  # Add html_content for database
-            listing_data["saved_at"] = time.time()
+            listing_data["saved_at"] = datetime.now()
 
             if self.use_database and self.db_manager:
                 # Save to database
@@ -73,7 +73,7 @@ class DemoListingSaver:
                 for listing_data, card_html in listings:
                     listing_data["card_html"] = card_html
                     listing_data["html_content"] = card_html  # Add html_content for database
-                    listing_data["saved_at"] = time.time()
+                    listing_data["saved_at"] = datetime.now()
                     listings_data.append(listing_data)
                 
                 saved_count = await self.db_manager.save_listings_batch_to_db(listings_data)

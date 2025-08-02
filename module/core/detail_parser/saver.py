@@ -1,11 +1,11 @@
 """
-Demo Detail Saver - Save fake car detail data to memory or database
+Demo Detail Saver - saves car details to database or fake storage
 """
 
-from typing import Dict, Any, List, Tuple
-import time
+from typing import List, Dict, Any, Optional, Tuple
+from datetime import datetime
 
-from parsers.tools.module.logger import get_logger
+from unreal_utils.logger import get_logger
 from ...database.database import DemoDatabaseManager
 
 
@@ -36,7 +36,7 @@ class DemoDetailSaver:
         try:
             # Add HTML to detail data
             detail_data["page_html"] = page_html
-            detail_data["saved_at"] = time.time()
+            detail_data["saved_at"] = datetime.now().isoformat()
 
             if self.use_database and self.db_manager:
                 # Save to database
@@ -71,7 +71,7 @@ class DemoDetailSaver:
                 details_data = []
                 for detail_data, page_html in details:
                     detail_data["page_html"] = page_html
-                    detail_data["saved_at"] = time.time()
+                    detail_data["saved_at"] = datetime.now().isoformat()
                     details_data.append(detail_data)
                 
                 saved_count = await self.db_manager.save_details_batch_to_db(details_data)
