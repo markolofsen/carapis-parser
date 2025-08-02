@@ -9,12 +9,12 @@ from unittest.mock import patch, AsyncMock, MagicMock
 from pathlib import Path
 
 # Add root project to path
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
-from parsers.parser_demo.module.core.listing_parser.extractor import DemoListingExtractor
-from parsers.parser_demo.module.core.listing_parser.parser import DemoListingParser
-from parsers.parser_demo.module.core.listing_parser.saver import DemoListingSaver
-from parsers.parser_demo.module.config import DemoConfig
+from ..core.listing_parser.extractor import DemoListingExtractor
+from ..core.listing_parser.parser import DemoListingParser
+from ..core.listing_parser.saver import DemoListingSaver
+from ..config import DemoConfig
 
 
 class TestDemoListingExtractor:

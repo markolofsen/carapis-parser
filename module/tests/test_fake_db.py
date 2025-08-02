@@ -10,9 +10,9 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from parsers.parser_demo.module.config import DemoConfig
-from parsers.parser_demo.module.core.listing_parser.saver import DemoListingSaver
-from parsers.parser_demo.module.core.detail_parser.saver import DemoDetailSaver
+from ..config import DemoConfig
+from ..core.listing_parser.saver import DemoListingSaver
+from ..core.detail_parser.saver import DemoDetailSaver
 
 
 class TestFakeDB:

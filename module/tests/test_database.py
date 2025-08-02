@@ -11,11 +11,11 @@ from pathlib import Path
 from datetime import datetime
 
 # Add root project to path
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 # Import only the database-related modules
-from module.database.models import DemoItem, DemoStatistics, initialize_database, database
-from module.database.database import DemoDatabaseManager
+from ..database.models import DemoItem, DemoStatistics, initialize_database, database
+from ..database.database import DemoDatabaseManager
 
 
 class TestDemoDatabaseManager:
@@ -23,6 +23,10 @@ class TestDemoDatabaseManager:
 
     def setup_method(self):
         """Setup test method - initialize database"""
+        # Close database if already open
+        if not database.is_closed():
+            database.close()
+        
         # Initialize database for testing
         initialize_database()
         self.db_manager = DemoDatabaseManager()

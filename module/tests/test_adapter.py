@@ -5,8 +5,8 @@ Tests for DemoDataServerAdapter
 import pytest
 from unittest.mock import patch, AsyncMock, MagicMock
 
-from parsers.parser_demo.module.adapter import DemoDataServerAdapter
-from parsers.parser_demo.module.config import DemoConfig
+from ..adapter import DemoDataServerAdapter
+from ..config import DemoConfig
 from src.data_server.core.configs import ServiceType
 
 
@@ -15,7 +15,7 @@ class TestDemoDataServerAdapter:
 
     @pytest.fixture
     def adapter(self):
-        return DemoDataServerAdapter()
+        return DemoDataServerAdapter("test_service")
 
     @pytest.fixture
     def config(self):
@@ -23,7 +23,7 @@ class TestDemoDataServerAdapter:
 
     @pytest.fixture
     def adapter_with_config(self, config):
-        return DemoDataServerAdapter(config)
+        return DemoDataServerAdapter("test_service", config)
 
     def test_adapter_initialization(self, adapter):
         """Test adapter initialization"""
@@ -33,7 +33,7 @@ class TestDemoDataServerAdapter:
 
     def test_adapter_with_custom_config(self, config):
         """Test adapter with custom configuration"""
-        adapter = DemoDataServerAdapter(config)
+        adapter = DemoDataServerAdapter("test_service", config)
         assert adapter.config == config
         assert adapter.config.max_brands == 5
         assert adapter.config.max_pages_per_brand == 2

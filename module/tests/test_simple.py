@@ -1,22 +1,24 @@
 #!/usr/bin/env python3
 """
-Test script for demo parser
+Simple test script for demo parser (no Django setup)
 """
 
 import asyncio
 import sys
 import os
+import pytest
 
 # Add root project to path
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
-from parsers.parser_demo.module.core.parser import DemoParser
-from parsers.parser_demo.module.config import DemoConfig
+from ..core.parser import DemoParser
+from ..config import DemoConfig
 
 
+@pytest.mark.asyncio
 async def test_demo_parser():
     """Test demo parser functionality"""
-    print("🚀 Testing Demo Parser...")
+    print("🚀 Testing Demo Parser (Simple)...")
 
     # Create config
     config = DemoConfig(
@@ -88,9 +90,8 @@ async def test_demo_parser():
         traceback.print_exc()
 
     finally:
-        # Cleanup
-        await parser.listing_parser.worker_manager.cleanup()
-        await parser.detail_parser.worker_manager.cleanup()
+        # Cleanup - parsers don't have persistent worker managers
+        print("🧹 Cleanup completed")
 
 
 if __name__ == "__main__":

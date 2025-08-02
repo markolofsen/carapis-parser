@@ -16,21 +16,21 @@ class TestFakeDBConfig:
 
     def test_fake_db_default(self):
         """Test that fake_db defaults to False"""
-        from parsers.parser_demo.module.config import DemoConfig
+        from ..config import DemoConfig
         
         config = DemoConfig()
         assert config.fake_db is False
 
     def test_fake_db_enabled(self):
         """Test that fake_db can be enabled"""
-        from parsers.parser_demo.module.config import DemoConfig
+        from ..config import DemoConfig
         
         config = DemoConfig(fake_db=True)
         assert config.fake_db is True
 
     def test_fake_mode_and_fake_db_combination(self):
         """Test combination of fake_mode and fake_db"""
-        from parsers.parser_demo.module.config import DemoConfig
+        from ..config import DemoConfig
         
         # Both enabled
         config = DemoConfig(fake_mode=True, fake_db=True)
@@ -54,7 +54,7 @@ class TestFakeDBConfig:
 
     def test_config_validation(self):
         """Test that fake_db is properly validated"""
-        from parsers.parser_demo.module.config import DemoConfig
+        from ..config import DemoConfig
         
         # Should work with boolean values
         config = DemoConfig(fake_db=True)
@@ -65,7 +65,7 @@ class TestFakeDBConfig:
 
     def test_to_http_config_includes_fake_mode(self):
         """Test that to_http_config includes fake_mode"""
-        from parsers.parser_demo.module.config import DemoConfig
+        from ..config import DemoConfig
         
         config = DemoConfig(fake_mode=True, fake_db=True)
         http_config = config.to_http_config()

@@ -153,7 +153,7 @@ class TestYourFeature:
 
     def test_something(self):
         """Test something"""
-        from parsers.parser_demo.module.your_module import YourClass
+        from ..module.your_module import YourClass
         
         # Your test code here
         assert True

@@ -15,7 +15,7 @@ def test_fake_db_config():
     print("🧪 Testing fake_db configuration...")
     
     try:
-        from parsers.parser_demo.module.config import DemoConfig
+        from ..config import DemoConfig
         
         # Test default config
         config = DemoConfig()
@@ -46,7 +46,7 @@ def test_saver_fake_db():
     print("🧪 Testing saver with fake_db...")
     
     try:
-        from parsers.parser_demo.module.core.listing_parser.saver import DemoListingSaver
+        from ..core.listing_parser.saver import DemoListingSaver
         
         # Test with fake_db=False
         saver = DemoListingSaver(use_database=True, fake_db=False)

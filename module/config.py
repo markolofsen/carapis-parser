@@ -3,7 +3,7 @@ Demo Parser Configuration
 """
 
 from typing import Dict, Any, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class DemoConfig(BaseModel):
@@ -67,8 +67,28 @@ class DemoConfig(BaseModel):
         default=3, description="Stop after N consecutive empty pages"
     )
 
-    class Config:
-        validate_assignment = True
+    model_config = dict(validate_assignment=True, frozen=True)  # Pydantic v2 ConfigDict
+
+    @field_validator('max_brands', 'max_pages_per_brand', 'max_urls', 'max_items_per_category', 'max_items_for_details', 'max_workers', 'timeout', 'max_retries', 'cars_per_page', 'consecutive_empty_pages_limit')
+    @classmethod
+    def validate_positive_integers(cls, v):
+        if v <= 0:
+            raise ValueError('Value must be positive')
+        return v
+
+    @field_validator('retry_delay', 'listing_delay', 'detail_delay')
+    @classmethod
+    def validate_positive_floats(cls, v):
+        if v < 0:
+            raise ValueError('Value must be non-negative')
+        return v
+
+    @field_validator('error_rate')
+    @classmethod
+    def validate_error_rate(cls, v):
+        if not 0.0 <= v <= 1.0:
+            raise ValueError('Error rate must be between 0.0 and 1.0')
+        return v
 
     def to_http_config(self) -> Dict[str, Any]:
         """Convert to HTTP client configuration"""

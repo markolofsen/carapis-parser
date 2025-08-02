@@ -11,11 +11,11 @@ import pytest
 from datetime import datetime
 
 # Add backend/django to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 # Import database modules (works when problematic imports are commented)
-from module.database.models import DemoItem, DemoStatistics, initialize_database, database
-from module.database.database import DemoDatabaseManager
+from ..database.models import DemoItem, DemoStatistics, initialize_database, database
+from ..database.database import DemoDatabaseManager
 
 
 @pytest.fixture

@@ -16,21 +16,21 @@ class TestFakeDB:
 
     def test_fake_db_default(self):
         """Test that fake_db defaults to False"""
-        from parsers.parser_demo.module.config import DemoConfig
+        from ..config import DemoConfig
         
         config = DemoConfig()
         assert config.fake_db is False
 
     def test_fake_db_enabled(self):
         """Test that fake_db can be enabled"""
-        from parsers.parser_demo.module.config import DemoConfig
+        from ..config import DemoConfig
         
         config = DemoConfig(fake_db=True)
         assert config.fake_db is True
 
     def test_fake_mode_and_fake_db_combination(self):
         """Test combination of fake_mode and fake_db"""
-        from parsers.parser_demo.module.config import DemoConfig
+        from ..config import DemoConfig
         
         # Both enabled
         config = DemoConfig(fake_mode=True, fake_db=True)
@@ -54,7 +54,7 @@ class TestFakeDB:
 
     def test_listing_saver_fake_db(self):
         """Test DemoListingSaver with fake_db"""
-        from parsers.parser_demo.module.core.listing_parser.saver import DemoListingSaver
+        from ..core.listing_parser.saver import DemoListingSaver
         
         # Test with fake_db=False (default)
         saver = DemoListingSaver(use_database=True, fake_db=False)
@@ -70,7 +70,7 @@ class TestFakeDB:
 
     def test_detail_saver_fake_db(self):
         """Test DemoDetailSaver with fake_db"""
-        from parsers.parser_demo.module.core.detail_parser.saver import DemoDetailSaver
+        from ..core.detail_parser.saver import DemoDetailSaver
         
         # Test with fake_db=False (default)
         saver = DemoDetailSaver(use_database=True, fake_db=False)
@@ -86,7 +86,7 @@ class TestFakeDB:
 
     def test_config_validation(self):
         """Test that fake_db is properly validated"""
-        from parsers.parser_demo.module.config import DemoConfig
+        from ..config import DemoConfig
         
         # Should work with boolean values
         config = DemoConfig(fake_db=True)
