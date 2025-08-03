@@ -17,7 +17,7 @@ from .config import DemoConfig
 from .core.parser import DemoParser
 from .core.listing_parser import DemoListingParser
 from .core.detail_parser import DemoDetailParser
-from unreal_utils.logger import get_logger
+from utils.logger import get_logger
 
 
 class DemoCLI:

@@ -6,8 +6,8 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 import asyncio
 
-from unreal_utils.logger import get_logger
-from unreal_http.worker_manager import HttpWorkerManager
+from utils.logger import get_logger
+from http.worker_manager import HttpWorkerManager
 from ...config import DemoConfig
 from .extractor import DemoListingExtractor
 from .saver import DemoListingSaver

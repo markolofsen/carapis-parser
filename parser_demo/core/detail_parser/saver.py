@@ -5,7 +5,7 @@ Demo Detail Saver - saves car details to database or fake storage
 from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime
 
-from unreal_utils.logger import get_logger
+from utils.logger import get_logger
 from ...database.database import DemoDatabaseManager
 
 

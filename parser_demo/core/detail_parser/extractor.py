@@ -9,7 +9,7 @@ from typing import Dict, Any, Optional, List, Tuple
 from bs4 import BeautifulSoup
 
 from faker import Faker
-from unreal_utils.logger import get_logger
+from utils.logger import get_logger
 
 
 class DemoDetailExtractor:

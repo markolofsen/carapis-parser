@@ -7,7 +7,7 @@ import random
 from datetime import datetime
 
 from faker import Faker
-from unreal_utils.logger import get_logger
+from utils.logger import get_logger
 
 
 class DemoListingExtractor:

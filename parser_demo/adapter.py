@@ -6,8 +6,8 @@ import asyncio
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 
-from unreal_utils.logger import get_logger
-from unreal_adapter.configs.config import ServiceType, ServiceConfig, ParserConfig
+from utils.logger import get_logger
+from adapter.configs.config import ServiceType, ServiceConfig, ParserConfig
 from .config import DemoConfig
 from .core.parser import DemoParser
 
@@ -38,7 +38,7 @@ class DemoDataServerAdapter:
         }
 
     def get_service_configs(self):
-        """Get service configurations using unreal_adapter configs"""
+        """Get service configurations using adapter configs"""
         parser_config = ParserConfig(
             parser_type="demo",
             name="Demo Parser",
