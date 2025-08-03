@@ -28,32 +28,32 @@ class DemoDatabaseCLI:
             choice = await questionary.select(
                 "🗄️ Demo Database Manager",
                 choices=[
-                    "🔧 Setup Database",
-                    "📊 Show Statistics",
-                    "🗑️ Clear All Data",
-                    "🔄 Reset Database",
-                    "📥 Load Test Data",
-                    "🔍 Search Items",
-                    "📁 Database Info",
-                    "❌ Exit",
+                    {"name": "🔧 Setup Database", "value": "setup"},
+                    {"name": "📊 Show Statistics", "value": "stats"},
+                    {"name": "🗑️ Clear All Data", "value": "clear"},
+                    {"name": "🔄 Reset Database", "value": "reset"},
+                    {"name": "📥 Load Test Data", "value": "load"},
+                    {"name": "🔍 Search Items", "value": "search"},
+                    {"name": "📁 Database Info", "value": "info"},
+                    {"name": "❌ Exit", "value": "exit"},
                 ],
             ).ask_async()
 
-            if choice == "🔧 Setup Database":
+            if choice == "setup":
                 await self.setup_database()
-            elif choice == "📊 Show Statistics":
+            elif choice == "stats":
                 await self.show_stats()
-            elif choice == "🗑️ Clear All Data":
+            elif choice == "clear":
                 await self.clear_all()
-            elif choice == "🔄 Reset Database":
+            elif choice == "reset":
                 await self.reset_database()
-            elif choice == "📥 Load Test Data":
+            elif choice == "load":
                 await self.load_test_data()
-            elif choice == "🔍 Search Items":
+            elif choice == "search":
                 await self.search_items()
-            elif choice == "📁 Database Info":
+            elif choice == "info":
                 await self.show_database_info()
-            elif choice == "❌ Exit":
+            elif choice == "exit":
                 break
 
     async def setup_database(self):

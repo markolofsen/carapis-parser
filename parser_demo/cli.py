@@ -32,29 +32,29 @@ class DemoCLI:
             choice = await questionary.select(
                 "🎯 Demo Parser",
                 choices=[
-                    "📊 Parse Listings",
-                    "🔄 Full Pipeline",
-                    "📄 Parse Details",
-                    "🌐 Parse HTML",
-                    "🗄️ Database",
-                    "🧪 Run Tests",
-                    "❌ Exit",
+                    {"name": "📊 Parse Listings", "value": "listings"},
+                    {"name": "🔄 Full Pipeline", "value": "pipeline"},
+                    {"name": "📄 Parse Details", "value": "details"},
+                    {"name": "🌐 Parse HTML", "value": "html"},
+                    {"name": "🗄️ Database", "value": "database"},
+                    {"name": "🧪 Run Tests", "value": "tests"},
+                    {"name": "❌ Exit", "value": "exit"},
                 ],
             ).ask_async()
 
-            if choice == "📊 Parse Listings":
+            if choice == "listings":
                 await self.parse_listings()
-            elif choice == "🔄 Full Pipeline":
+            elif choice == "pipeline":
                 await self.full_pipeline()
-            elif choice == "📄 Parse Details":
+            elif choice == "details":
                 await self.parse_details()
-            elif choice == "🌐 Parse HTML":
+            elif choice == "html":
                 await self.parse_html()
-            elif choice == "🗄️ Database":
+            elif choice == "database":
                 await self.database()
-            elif choice == "🧪 Run Tests":
+            elif choice == "tests":
                 await self.run_tests()
-            elif choice == "❌ Exit":
+            elif choice == "exit":
                 break
 
     async def parse_listings(self):
