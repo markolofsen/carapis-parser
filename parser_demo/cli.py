@@ -238,7 +238,7 @@ class DemoCLI:
 
     async def database(self):
         """Database management"""
-        from parsers.parser_demo.cli_db import DemoDatabaseCLI
+        from .cli_db import DemoDatabaseCLI
 
         db_cli = DemoDatabaseCLI()
         await db_cli.main_menu()

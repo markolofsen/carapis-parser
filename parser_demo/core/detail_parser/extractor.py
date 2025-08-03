@@ -55,12 +55,15 @@ class DemoDetailExtractor:
                 # Generate random IDs if URL parsing fails
                 car_id = f"demo_car_{random.randint(10000, 99999)}"
                 dealer_id = f"demo_dealer_{random.randint(1000, 9999)}"
-
+            
             # Generate comprehensive car details
             detail_data.update(self._generate_car_specifications(car_id, dealer_id))
             detail_data.update(self._generate_dealer_info(dealer_id))
             detail_data.update(self._generate_images(car_id))
             detail_data.update(self._generate_reviews())
+            
+            # Set the ID for database storage
+            detail_data["id"] = car_id
 
             self.logger.info(f"Generated detail data for {car_id}")
             return detail_data

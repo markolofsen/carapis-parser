@@ -79,14 +79,18 @@ class DemoListingExtractor:
         models = brand_models.get(brand_name, ["Model"])
         
         for i in range(num_listings):
+            # Generate consistent ID format that matches detail extractor
+            car_id = f"demo_car_{brand_name.lower()}_{i+1:03d}"
+            dealer_id = f"demo_dealer_{brand_name.lower()}_{i+1:03d}"
+            
             listing = {
-                "id": f"{brand_name.lower()}_car_{page_num}_{i+1}",
+                "id": car_id,  # Use the same ID format as detail extractor
                 "title": f"{brand_name} {random.choice(models)}",
                 "price": f"${random.randint(15000, 50000):,}",
                 "mileage": f"{random.randint(10000, 100000):,} km",
                 "year": random.randint(2015, 2024),
                 "brand": brand_name,
-                "url": f"https://demo-cars.com/dealer/demo_dealer_{brand_name.lower()}_{i+1:03d}/demo_car_{brand_name.lower()}_{i+1:03d}.html",
+                "url": f"https://demo-cars.com/dealer/{dealer_id}/{car_id}.html",
                 "page_num": page_num
             }
             listings.append(listing)

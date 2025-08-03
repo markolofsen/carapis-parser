@@ -7,14 +7,13 @@ from datetime import datetime
 import asyncio
 
 from unreal_utils.logger import get_logger
-from unreal_http.worker_manager import HttpWorkerManager
 from ...config import DemoConfig
 from .extractor import DemoListingExtractor
 from .saver import DemoListingSaver
 
 
 class DemoListingParser:
-    """Demo listing parser with HTTP client integration"""
+    """Demo listing parser that generates fake data"""
 
     def __init__(self, service_id: str, config: DemoConfig, fake_mode: bool = False):
         self.config = config
@@ -24,8 +23,8 @@ class DemoListingParser:
 
         # Initialize components
         self.extractor = DemoListingExtractor()
-        # Use database saver when not in fake_mode and not in fake_db
-        self.saver = DemoListingSaver(use_database=not fake_mode, fake_db=getattr(config, 'fake_db', False))
+        # Use database saver when not in fake_db mode
+        self.saver = DemoListingSaver(use_database=not getattr(config, 'fake_db', False), fake_db=getattr(config, 'fake_db', False))
 
         # Statistics
         self.total_listings = 0
@@ -65,171 +64,52 @@ class DemoListingParser:
 
         self.logger.info(f"Processing {len(brands)} demo brands for listings...")
 
-        # In fake mode, generate fake data without HTTP requests
-        if self.fake_mode:
-            self.logger.info("🎯 FAKE MODE: Generating fake listings without HTTP requests")
+        # Generate fake listings for each brand
+        for brand in brands:
+            brand_name = brand["name"]
+            self.logger.info(f"🎯 Generating fake listings for {brand_name}")
             
-            # Generate fake listings for each brand
-            for brand in brands:
-                brand_name = brand["name"]
-                self.logger.info(f"🎯 Generating fake listings for {brand_name}")
-                
-                # Generate fake listings
-                fake_listings = []
-                for page_num in range(1, 4):  # Generate 3 pages of fake listings
-                    page_listings = self.extractor.extract_listings(
-                        html_content="",  # Empty content in fake mode
-                        brand_name=brand_name,
-                        page_num=page_num
-                    )
-                    fake_listings.extend(page_listings)
-                
-                # Save fake listings
-                if fake_listings:
-                    try:
-                        # Convert listings to format expected by saver: (listing_data, card_html)
-                        listings_with_html = []
-                        for listing in fake_listings:
-                            # Generate fake HTML for each listing
-                            card_html = f"""
-                            <div class="car-listing">
-                                <h3>{listing['title']}</h3>
-                                <p>Price: {listing['price']}</p>
-                                <p>Mileage: {listing['mileage']}</p>
-                                <p>Year: {listing['year']}</p>
-                                <p>Brand: {listing['brand']}</p>
-                            </div>
-                            """
-                            listings_with_html.append((listing, card_html))
-                        
-                        saved_count = await self.saver.save_listings(listings_with_html)
-                        self.total_listings += saved_count
-                        self.logger.success(
-                            f"✅ Generated {saved_count} fake listings for {brand_name}"
-                        )
-                    except Exception as e:
-                        self.logger.error(f"Error saving fake listings for {brand_name}: {e}")
-                        self.failed_brands.append(brand_name)
-                else:
-                    self.logger.warning(f"No fake listings generated for {brand_name}")
+            # Generate fake listings
+            fake_listings = []
+            max_pages = max_pages_per_brand or 3  # Default to 3 pages
             
-            self.logger.success(
-                f"✅ Demo listing parsing completed. Total: {self.total_listings}"
-            )
-            return self.total_listings
-
-        # Real mode - use HTTP worker manager
-        self.logger.info(
-            f"🚀 LISTING PARSER: Creating HttpWorkerManager for service {self.service_id}"
-        )
-        http_config = self.config.to_http_config()
-        http_config["service_name"] = self.service_id  # Override with actual service_id
-        self.logger.info(f"🚀 LISTING PARSER: HTTP config: {http_config}")
-
-        worker_manager = HttpWorkerManager.create_for_service(**http_config)
-        self.logger.info(f"✅ LISTING PARSER: HttpWorkerManager created")
-
-        async def process_brand_listings(
-            url: str, context: Dict[str, Any]
-        ) -> Dict[str, Any]:
-            """Process listings for a single brand"""
-            http_manager = context["http_manager"]
-
-            # Find brand info by URL
-            brand_info = next((brand for brand in brands if brand["url"] == url), None)
-            if not brand_info:
-                return {"success": False, "error": f"Brand not found for URL: {url}"}
-
-            brand_name = brand_info.get("name", "Unknown")
-            brand_url = brand_info.get("url", "")
-
-            if not brand_url:
-                return {"success": False, "error": f"No URL for brand {brand_name}"}
-
-            self.logger.info(f"Processing demo brand: {brand_name}")
-
-            all_listings = []
-            max_pages = max_pages_per_brand or self.config.max_pages_per_brand
-
             for page_num in range(1, max_pages + 1):
+                page_listings = self.extractor.extract_listings(
+                    html_content="",  # Empty content in fake mode
+                    brand_name=brand_name,
+                    page_num=page_num
+                )
+                fake_listings.extend(page_listings)
+            
+            # Save fake listings
+            if fake_listings:
                 try:
-                    # Make a real HTTP request to the demo URL (but we'll ignore the response)
-                    result = await http_manager.get_html(brand_url)
-
-                    # Simulate processing delay
-                    await asyncio.sleep(self.config.listing_delay)
-
-                    # Generate fake listings regardless of HTTP response
-                    page_listings_with_html = self.extractor.extract_listings(
-                        result.get("content", ""), brand_name, page_num
-                    )
-
-                    if page_listings_with_html:
-                        all_listings.extend(page_listings_with_html)
-                        self.logger.info(
-                            f"Generated {len(page_listings_with_html)} fake listings on page {page_num} for {brand_name}"
-                        )
-                    else:
-                        self.logger.info(
-                            f"No fake listings generated on page {page_num} for {brand_name}"
-                        )
-
-                except Exception as e:
-                    self.logger.error(
-                        f"Error processing page {page_num} for {brand_name}: {e}"
-                    )
-                    # Continue with next page even if there's an error
-
-            # Save listings for this brand
-            if all_listings:
-                try:
-                    saved_count = await self.saver.save_listings(all_listings)
+                    # Convert listings to format expected by saver: (listing_data, card_html)
+                    listings_with_html = []
+                    for listing in fake_listings:
+                        # Generate fake HTML for each listing
+                        card_html = f"""
+                        <div class="car-listing">
+                            <h3>{listing['title']}</h3>
+                            <p>Price: {listing['price']}</p>
+                            <p>Mileage: {listing['mileage']}</p>
+                            <p>Year: {listing['year']}</p>
+                            <p>Brand: {listing['brand']}</p>
+                        </div>
+                        """
+                        listings_with_html.append((listing, card_html))
+                    
+                    saved_count = await self.saver.save_listings(listings_with_html)
                     self.total_listings += saved_count
                     self.logger.success(
-                        f"✅ Completed demo brand {brand_name}: {saved_count} listings"
+                        f"✅ Generated {saved_count} fake listings for {brand_name}"
                     )
-                    return {
-                        "success": True,
-                        "brand": brand_name,
-                        "listings_count": saved_count,
-                        "total_pages": max_pages,
-                    }
                 except Exception as e:
-                    self.logger.error(f"Error saving listings for {brand_name}: {e}")
+                    self.logger.error(f"Error saving fake listings for {brand_name}: {e}")
                     self.failed_brands.append(brand_name)
-                    return {"success": False, "brand": brand_name, "error": str(e)}
             else:
                 self.logger.warning(f"No fake listings generated for {brand_name}")
-                return {
-                    "success": True,
-                    "brand": brand_name,
-                    "listings_count": 0,
-                    "total_pages": 0,
-                }
-
-        # Process all brands
-        async with worker_manager:
-            brand_urls = [brand["url"] for brand in brands]
-            results = await worker_manager.process_urls_batch(
-                urls=brand_urls, url_processor=process_brand_listings
-            )
-
-        # Process results
-        successful_brands = 0
-        for result in results:
-            # Handle both coroutines and regular results
-            if hasattr(result, "__await__"):
-                result = await result
-
-            # Handle ExecutionResult objects
-            if hasattr(result, "data"):
-                result = result.data
-
-            if result.get("success"):
-                successful_brands += 1
-            else:
-                self.failed_brands.append(result.get("brand", "Unknown"))
-
+        
         self.logger.success(
             f"✅ Demo listing parsing completed. Total: {self.total_listings}"
         )

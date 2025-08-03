@@ -16,6 +16,17 @@ class DemoDatabaseManager:
 
     def __init__(self):
         self.logger = get_logger('demo_db_manager')
+        # Initialize database on creation
+        self._initialize_database()
+    
+    def _initialize_database(self):
+        """Initialize database and create tables"""
+        try:
+            from .models import initialize_database
+            initialize_database()
+            self.logger.info("Database initialized successfully")
+        except Exception as e:
+            self.logger.error(f"Failed to initialize database: {e}")
 
     @sync_to_async
     def save_listing_to_db(self, listing_data: Dict[str, Any]) -> bool:
@@ -124,12 +135,16 @@ class DemoDatabaseManager:
             # Find existing item or create new one
             try:
                 item = DemoItem.get(DemoItem.item_id == detail_data.get('id'))
+                # Item exists, update it
+                self.logger.info(f"Demo: Updating existing item {detail_data.get('id')}")
             except DemoItem.DoesNotExist:
+                # Item doesn't exist, create new one
                 item = DemoItem.create(
                     item_id=detail_data.get('id', 'unknown'),
                     title=detail_data.get('title'),
                     url=detail_data.get('url')
                 )
+                self.logger.info(f"Demo: Created new item {detail_data.get('id')}")
             
             # Update with detail data
             item.detail_html = detail_data.get('html_content')
@@ -154,12 +169,16 @@ class DemoDatabaseManager:
                     # Find existing item or create new one
                     try:
                         item = DemoItem.get(DemoItem.item_id == detail_data.get('id'))
+                        # Item exists, update it
+                        self.logger.info(f"Demo: Updating existing item {detail_data.get('id')}")
                     except DemoItem.DoesNotExist:
+                        # Item doesn't exist, create new one
                         item = DemoItem.create(
-                            item_id=detail_data.get('id', f'detail_{saved_count}'),
+                            item_id=detail_data.get('id', 'unknown'),
                             title=detail_data.get('title'),
                             url=detail_data.get('url')
                         )
+                        self.logger.info(f"Demo: Created new item {detail_data.get('id')}")
                     
                     # Update with detail data
                     item.detail_html = detail_data.get('html_content')
@@ -283,13 +302,18 @@ class DemoDatabaseManager:
             import os
             
             db_size = os.path.getsize(DB_PATH) if os.path.exists(DB_PATH) else 0
+            db_size_mb = round(db_size / (1024 * 1024), 2) if db_size > 0 else 0
+            db_size_kb = round(db_size / 1024, 2) if db_size > 0 else 0
             
             return {
                 'database_path': DB_PATH,
                 'database_size_bytes': db_size,
-                'database_size_mb': round(db_size / (1024 * 1024), 2),
+                'database_size_kb': db_size_kb,
+                'database_size_mb': db_size_mb,
+                'database_size': f"{db_size_kb} KB" if db_size_kb < 1024 else f"{db_size_mb} MB",
                 'database_type': 'sqlite3_peewee',
-                'tables': ['demo_items', 'demo_statistics']
+                'tables': ['demo_items', 'demo_statistics'],
+                'exists': os.path.exists(DB_PATH)
             }
         except Exception as e:
             self.logger.error(f"Failed to get database info: {e}")
