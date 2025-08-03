@@ -11,10 +11,10 @@ from pathlib import Path
 project_root = Path(__file__)
 sys.path.insert(0, str(project_root))
 
-
 import asyncio
 import questionary
 from .config import DemoConfig
+from .core.parser import DemoParser
 from .core.listing_parser import DemoListingParser
 from .core.detail_parser import DemoDetailParser
 from unreal_utils.logger import get_logger
@@ -71,7 +71,7 @@ class DemoCLI:
             )
 
             parser = DemoListingParser(
-                service_id="demo_cli_listing", config=config, fake_mode=False
+                service_id="demo_cli_listing", config=config, fake_mode=True
             )
             await parser.initialize()
 
@@ -93,7 +93,7 @@ class DemoCLI:
         )
 
         parser = DemoListingParser(
-            service_id="demo_cli_listing", config=config, fake_mode=False
+            service_id="demo_cli_listing", config=config, fake_mode=True
         )
         await parser.initialize()
 
@@ -116,7 +116,7 @@ class DemoCLI:
             config.max_brands = int(max_brands)
 
             parser = DemoParser(
-                service_id="demo_cli_service", config=config, fake_mode=False
+                service_id="demo_cli_service", config=config, fake_mode=True
             )
 
             try:
@@ -137,7 +137,7 @@ class DemoCLI:
         config = DemoConfig(max_brands=max_brands)
 
         parser = DemoParser(
-            service_id="demo_cli_service", config=config, fake_mode=False
+            service_id="demo_cli_service", config=config, fake_mode=True
         )
 
         try:
@@ -162,7 +162,7 @@ class DemoCLI:
             config = DemoConfig(max_urls=int(max_urls))
 
             parser = DemoDetailParser(
-                service_id="demo_cli_detail", config=config, fake_mode=False
+                service_id="demo_cli_detail", config=config, fake_mode=True
             )
             await parser.initialize()
 
@@ -181,7 +181,7 @@ class DemoCLI:
         config = DemoConfig(max_urls=max_urls)
 
         parser = DemoDetailParser(
-            service_id="demo_cli_detail", config=config, fake_mode=False
+            service_id="demo_cli_detail", config=config, fake_mode=True
         )
         await parser.initialize()
 
@@ -203,7 +203,7 @@ class DemoCLI:
             config = DemoConfig(max_urls=int(max_urls))
 
             parser = DemoDetailParser(
-                service_id="demo_cli_html", config=config, fake_mode=False
+                service_id="demo_cli_html", config=config, fake_mode=True
             )
             await parser.initialize()
 
@@ -222,7 +222,7 @@ class DemoCLI:
         config = DemoConfig(max_urls=max_urls)
 
         parser = DemoDetailParser(
-            service_id="demo_cli_html", config=config, fake_mode=False
+            service_id="demo_cli_html", config=config, fake_mode=True
         )
         await parser.initialize()
 

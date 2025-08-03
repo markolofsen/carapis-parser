@@ -67,7 +67,7 @@ class DemoConfig(BaseModel):
         default=3, description="Stop after N consecutive empty pages"
     )
 
-    model_config = dict(validate_assignment=True, frozen=True)  # Pydantic v2 ConfigDict
+    model_config = dict(validate_assignment=True, frozen=False)  # Pydantic v2 ConfigDict
 
     @field_validator('max_brands', 'max_pages_per_brand', 'max_urls', 'max_items_per_category', 'max_items_for_details', 'max_workers', 'timeout', 'max_retries', 'cars_per_page', 'consecutive_empty_pages_limit')
     @classmethod

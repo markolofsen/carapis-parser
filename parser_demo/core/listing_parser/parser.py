@@ -65,7 +65,60 @@ class DemoListingParser:
 
         self.logger.info(f"Processing {len(brands)} demo brands for listings...")
 
-        # Create HTTP worker manager for demo requests
+        # In fake mode, generate fake data without HTTP requests
+        if self.fake_mode:
+            self.logger.info("🎯 FAKE MODE: Generating fake listings without HTTP requests")
+            
+            # Generate fake listings for each brand
+            for brand in brands:
+                brand_name = brand["name"]
+                self.logger.info(f"🎯 Generating fake listings for {brand_name}")
+                
+                # Generate fake listings
+                fake_listings = []
+                for page_num in range(1, 4):  # Generate 3 pages of fake listings
+                    page_listings = self.extractor.extract_listings(
+                        html_content="",  # Empty content in fake mode
+                        brand_name=brand_name,
+                        page_num=page_num
+                    )
+                    fake_listings.extend(page_listings)
+                
+                # Save fake listings
+                if fake_listings:
+                    try:
+                        # Convert listings to format expected by saver: (listing_data, card_html)
+                        listings_with_html = []
+                        for listing in fake_listings:
+                            # Generate fake HTML for each listing
+                            card_html = f"""
+                            <div class="car-listing">
+                                <h3>{listing['title']}</h3>
+                                <p>Price: {listing['price']}</p>
+                                <p>Mileage: {listing['mileage']}</p>
+                                <p>Year: {listing['year']}</p>
+                                <p>Brand: {listing['brand']}</p>
+                            </div>
+                            """
+                            listings_with_html.append((listing, card_html))
+                        
+                        saved_count = await self.saver.save_listings(listings_with_html)
+                        self.total_listings += saved_count
+                        self.logger.success(
+                            f"✅ Generated {saved_count} fake listings for {brand_name}"
+                        )
+                    except Exception as e:
+                        self.logger.error(f"Error saving fake listings for {brand_name}: {e}")
+                        self.failed_brands.append(brand_name)
+                else:
+                    self.logger.warning(f"No fake listings generated for {brand_name}")
+            
+            self.logger.success(
+                f"✅ Demo listing parsing completed. Total: {self.total_listings}"
+            )
+            return self.total_listings
+
+        # Real mode - use HTTP worker manager
         self.logger.info(
             f"🚀 LISTING PARSER: Creating HttpWorkerManager for service {self.service_id}"
         )

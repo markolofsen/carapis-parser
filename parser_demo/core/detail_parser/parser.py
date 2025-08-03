@@ -164,6 +164,7 @@ class DemoDetailParser:
             timeout=timeout,
             max_retries=2,
             retry_delay=1.0,
+            fake_mode=fake_mode,
         )
         self.logger.info(
             f"Created HttpWorkerManager with service_name: {self.service_id}"
@@ -259,16 +260,112 @@ class DemoDetailParser:
 
             self.logger.info(f"📋 Processing {len(urls_list)} fake vehicles")
 
-            # Process URLs using universal HTTP client module
-            try:
-                results = await self.worker_manager.process_urls_with_retry(
-                    urls=urls_list,
-                    url_processor=demo_url_processor,
-                    extract_ids_func=demo_extract_ids,
-                    save_func=demo_save_result,
-                    max_retries=2,
-                    retry_delay=1.0,
+            # In fake mode, generate fake data without HTTP requests
+            if self.fake_mode:
+                self.logger.info("🎯 FAKE MODE: Generating fake details without HTTP requests")
+                
+                successful_vehicles = []
+                failed_vehicles = []
+                
+                # Generate fake details for each URL
+                for url in urls_list:
+                    try:
+                        # Extract IDs from URL
+                        ids = demo_extract_ids(url)
+                        car_id = ids.get("car_id")
+                        dealer_id = ids.get("dealer_id")
+                        
+                        # Generate fake detail data
+                        extractor = DemoDetailExtractor()
+                        detail_data, page_html = extractor.extract_detail("", url)
+                        
+                        if detail_data:
+                            successful_vehicles.append({
+                                "url": url,
+                                "success": True,
+                                "detail_data": detail_data,
+                                "page_html": page_html,
+                                "dealer_id": dealer_id,
+                                "car_id": car_id,
+                            })
+                        else:
+                            failed_vehicles.append({
+                                "url": url,
+                                "success": False,
+                                "error": "Failed to generate fake detail data",
+                                "dealer_id": dealer_id,
+                                "car_id": car_id,
+                            })
+                    except Exception as e:
+                        failed_vehicles.append({
+                            "url": url,
+                            "success": False,
+                            "error": str(e),
+                        })
+                
+                results = successful_vehicles + failed_vehicles
+                
+                # Save successful vehicles to memory (for both fake and real modes)
+                if successful_vehicles:
+                    self.logger.info(
+                        f"💾 Saving {len(successful_vehicles)} fake vehicle details to memory..."
+                    )
+
+                    # Save details to memory
+                    details_to_save = []
+                    for vehicle_data in successful_vehicles:
+                        detail_data = vehicle_data.get("detail_data", {})
+                        page_html = vehicle_data.get("page_html", "")
+                        if detail_data and page_html:
+                            details_to_save.append((detail_data, page_html))
+
+                    if details_to_save:
+                        saved_count = await self.saver.save_details(details_to_save)
+                    else:
+                        saved_count = 0
+                else:
+                    saved_count = 0
+
+                # Update statistics
+                self.total_details = len(successful_vehicles)
+                self.total_html_pages = saved_count
+                self.failed_urls = [r.get("url") for r in failed_vehicles if r]
+
+                # Show detailed final statistics
+                total_processed = len(urls_list)
+                total_successful = len(successful_vehicles)
+                total_failed = len(failed_vehicles)
+                overall_success_rate = (
+                    (total_successful / total_processed * 100)
+                    if total_processed > 0
+                    else 0
                 )
+
+                self.logger.success("🎯 Fake detail processing completed!")
+                self.logger.info(f"📊 Processing results:")
+                self.logger.info(f"   • Total vehicles: {total_processed}")
+                self.logger.info(
+                    f"   • Successfully processed: {total_successful} ({overall_success_rate:.1f}%)"
+                )
+                self.logger.info(f"   • Failed to process: {total_failed}")
+                self.logger.info(f"   • Saved to memory: {saved_count}")
+
+                if total_failed > 0:
+                    self.logger.warning(f"⚠️ {total_failed} vehicles failed processing")
+            else:
+                # Real mode - use HTTP worker manager
+                try:
+                    results = await self.worker_manager.process_urls_with_retry(
+                        urls=urls_list,
+                        url_processor=demo_url_processor,
+                        extract_ids_func=demo_extract_ids,
+                        save_func=demo_save_result,
+                        max_retries=2,
+                        retry_delay=1.0,
+                    )
+                except Exception as e:
+                    self.logger.error(f"Error in HTTP processing: {e}")
+                    results = []
 
                 # Process results
                 successful_vehicles = []
@@ -327,9 +424,6 @@ class DemoDetailParser:
 
                 if total_failed > 0:
                     self.logger.warning(f"⚠️ {total_failed} vehicles failed processing")
-
-            except Exception as e:
-                self.logger.error(f"Error processing vehicles: {e}")
 
         except Exception as e:
             import traceback

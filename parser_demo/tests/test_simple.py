@@ -31,7 +31,7 @@ async def test_demo_parser():
     )
 
     # Create parser
-    parser = DemoParser(config)
+    parser = DemoParser("test_service", config, fake_mode=True)
 
     try:
         # Initialize

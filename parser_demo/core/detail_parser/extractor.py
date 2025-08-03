@@ -3,6 +3,8 @@ Demo Detail Extractor - Generate fake car detail data
 """
 
 import re
+import random
+from datetime import datetime
 from typing import Dict, Any, Optional, List, Tuple
 from bs4 import BeautifulSoup
 

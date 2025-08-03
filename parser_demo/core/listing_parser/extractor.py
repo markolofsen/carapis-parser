@@ -31,10 +31,14 @@ class DemoListingExtractor:
         items = []
         num_items = random.randint(5, 15)
         
+        car_models = ["Camry", "Corolla", "Civic", "Accord", "3 Series", "5 Series", "C-Class", "E-Class", "A4", "A6"]
+        
+        car_makes = ["Toyota", "Honda", "BMW", "Mercedes", "Audi", "Ford", "Chevrolet", "Nissan", "Hyundai", "Kia"]
+        
         for i in range(num_items):
             item = {
                 "id": f"car_{i+1}",
-                "title": f"{self.fake.car_make()} {self.fake.car_model()}",
+                "title": f"{random.choice(car_makes)} {random.choice(car_models)}",
                 "price": f"${random.randint(15000, 50000):,}",
                 "mileage": f"{random.randint(10000, 100000):,} km",
                 "year": random.randint(2015, 2024),
@@ -53,3 +57,39 @@ class DemoListingExtractor:
             "has_next": random.choice([True, False]),
             "has_prev": random.choice([True, False])
         }
+    
+    def extract_listings(self, html_content: str, brand_name: str, page_num: int) -> List[Dict[str, Any]]:
+        """Extract listings from HTML (demo implementation)"""
+        # Generate fake listings for the brand
+        listings = []
+        num_listings = random.randint(8, 20)
+        
+        # Brand-specific models
+        brand_models = {
+            "Toyota": ["Camry", "Corolla", "RAV4", "Highlander", "Tacoma"],
+            "Honda": ["Civic", "Accord", "CR-V", "Pilot", "Odyssey"],
+            "BMW": ["3 Series", "5 Series", "X3", "X5", "7 Series"],
+            "Mercedes": ["C-Class", "E-Class", "S-Class", "GLC", "GLE"],
+            "Audi": ["A4", "A6", "Q5", "Q7", "A3"],
+            "Ford": ["F-150", "Mustang", "Explorer", "Escape", "Focus"],
+            "Chevrolet": ["Silverado", "Camaro", "Equinox", "Malibu", "Tahoe"],
+            "Nissan": ["Altima", "Maxima", "Rogue", "Pathfinder", "Sentra"]
+        }
+        
+        models = brand_models.get(brand_name, ["Model"])
+        
+        for i in range(num_listings):
+            listing = {
+                "id": f"{brand_name.lower()}_car_{page_num}_{i+1}",
+                "title": f"{brand_name} {random.choice(models)}",
+                "price": f"${random.randint(15000, 50000):,}",
+                "mileage": f"{random.randint(10000, 100000):,} km",
+                "year": random.randint(2015, 2024),
+                "brand": brand_name,
+                "url": f"https://demo-cars.com/dealer/demo_dealer_{brand_name.lower()}_{i+1:03d}/demo_car_{brand_name.lower()}_{i+1:03d}.html",
+                "page_num": page_num
+            }
+            listings.append(listing)
+        
+        self.logger.info(f"Generated {len(listings)} fake listings for {brand_name} on page {page_num}")
+        return listings
