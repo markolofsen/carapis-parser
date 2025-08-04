@@ -12,7 +12,8 @@
     "commit": "npx openrouter-commit -run",
     "commit2": "git add . && git commit -m 'fixes' && git push",
     "cli": "poetry run python -m parser_demo.cli",
-    "db": "poetry run python -m parser_demo.cli_db"
+    "db": "poetry run python -m parser_demo.cli_db",
+    "tree": "clear && tree -I 'node_modules|.git|.DS_Store|.pytest_cache|__pycache__|browser_profiles|.venv' --dirsfirst && pwd"
   },
   "dependencies": {
     "openrouter-commit": "^1.1.6"
